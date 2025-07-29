@@ -168,6 +168,12 @@
       const user = existingUsers.find(u => u.email === email && u.password === password);
       
       if (user) {
+        // Update last login time
+        user.lastLogin = new Date().toISOString();
+        const userIndex = existingUsers.findIndex(u => u.email === email);
+        existingUsers[userIndex] = user;
+        localStorage.setItem('justbuy_users', JSON.stringify(existingUsers));
+        
         // Save user info to sessionStorage
         sessionStorage.setItem('currentUser', JSON.stringify({ email: user.email, username: user.username }));
         window.location.href = 'index.html';
