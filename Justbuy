@@ -1769,35 +1769,6 @@
                 </div>
             </div>
             <div class="container">
-        <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-    <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyCONPao46hKk3HxwAHJmx0OWrg-jJaxqrc",
-        authDomain: "justbuystore-e7543.firebaseapp.com",
-        projectId: "justbuystore-e7543",
-        storageBucket: "justbuystore-e7543.appspot.com",
-        messagingSenderId: "6718042368",
-        appId: "1:6718042368:web:11d484b0d484e3ab1e83e5",
-        measurementId: "G-F4CYKFEST4"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // --- Firebase App Check (reCAPTCHA v3) ---
-    // For production, do NOT use debug token. Use your reCAPTCHA v3 site key from Firebase Console
-    var script = document.createElement('script');
-    script.src = "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js";
-    script.onload = function() {
-        firebase.appCheck().activate('6LdngZMrAAAAABDLcf5DbC9pO5lo4lJWB6y-RGrG');
-    };
-    document.head.appendChild(script);
-    </script>
-
-
 
     <div class="container">
     <section id="products" class="products">
@@ -1888,9 +1859,7 @@
     
         function logout() {
         sessionStorage.removeItem('currentUser');
-        firebase.auth().signOut().then(() => {
-            window.location.href = "login.html";
-        });
+        window.location.href = "index.html";
         }
     </script>
     
