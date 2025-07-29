@@ -147,58 +147,55 @@
       Already have an account? <a href="login.html">Log in</a>
     </div>
   </div>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js"></script>
   <script>
-    // Enable App Check debug token for local development
-    self.FIREBASE_APPCHECK_DEBUG_TOKEN = "151f0b2c-5801-4056-813e-4322605c25d3";
-    const firebaseConfig = {
-      apiKey: "AIzaSyCONPao46hKk3HxwAHJmx0OWrg-jJaxqrc",
-      authDomain: "justbuystore-e7543.firebaseapp.com",
-      projectId: "justbuystore-e7543",
-      storageBucket: "justbuystore-e7543.appspot.com",
-      messagingSenderId: "6718042368",
-      appId: "1:6718042368:web:11d484b0d484e3ab1e83e5",
-      measurementId: "G-F4CYKFEST4"
-    };
-    firebase.initializeApp(firebaseConfig);
-    // Activate Firebase App Check (reCAPTCHA v3) with debug token for local development
-    firebase.appCheck().activate('6LdngZMrAAAAABDLcf5DbC9pO5lo4lJWB6y-RGrG', {
-      isTokenAutoRefreshEnabled: true
-    });
-    const auth = firebase.auth();
     const signupForm = document.getElementById('signup-form');
     const errorMessage = document.getElementById('error-message');
+    
     signupForm.addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value;
       const username = document.getElementById('signup-username').value.trim();
+      
       errorMessage.style.display = 'none';
+      
       if (!username) {
         errorMessage.textContent = 'Please enter a username.';
         errorMessage.style.display = 'block';
         return;
       }
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Optionally update display name
-          return userCredential.user.updateProfile({ displayName: username });
-        })
-        .then(() => {
-          // Save user info to sessionStorage
-          sessionStorage.setItem('currentUser', JSON.stringify({ email, username }));
-          window.location.href = 'index.html';
-        })
-        .catch((error) => {
-          let msg = error.message;
-          if (msg.includes('email-already-in-use')) msg = 'Email is already in use.';
-          if (msg.includes('invalid-email')) msg = 'Please enter a valid email address.';
-          if (msg.includes('weak-password')) msg = 'Password should be at least 6 characters.';
-          errorMessage.textContent = msg;
-          errorMessage.style.display = 'block';
-        });
+      
+      if (!email) {
+        errorMessage.textContent = 'Please enter an email address.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+      
+      if (password.length < 6) {
+        errorMessage.textContent = 'Password should be at least 6 characters.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+      
+      // Check if user already exists
+      const existingUsers = JSON.parse(localStorage.getItem('justbuy_users') || '[]');
+      const userExists = existingUsers.find(user => user.email === email);
+      
+      if (userExists) {
+        errorMessage.textContent = 'Email is already in use.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+      
+      // Create new user
+      const newUser = { email, password, username };
+      existingUsers.push(newUser);
+      localStorage.setItem('justbuy_users', JSON.stringify(existingUsers));
+      
+      // Save current user session
+      sessionStorage.setItem('currentUser', JSON.stringify({ email, username }));
+      
+      window.location.href = 'index.html';
     });
   </script>
 </body>
