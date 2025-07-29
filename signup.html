@@ -188,7 +188,14 @@
       }
       
       // Create new user
-      const newUser = { email, password, username };
+      const newUser = { 
+        email, 
+        password, 
+        username,
+        registrationDate: new Date().toISOString(),
+        lastLogin: new Date().toISOString(),
+        status: 'active'
+      };
       existingUsers.push(newUser);
       localStorage.setItem('justbuy_users', JSON.stringify(existingUsers));
       
